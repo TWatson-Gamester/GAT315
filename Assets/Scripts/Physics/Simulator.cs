@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Simulator : Singleton<Simulator>
 {
+	public Vector2 gravity = new Vector2(0, -9.8f);
 	public List<Body> bodies = new List<Body>();
 	Camera activeCamera;
 
@@ -16,7 +17,13 @@ public class Simulator : Singleton<Simulator>
     {
         foreach(var body in bodies)
         {
+			body.Step(Time.deltaTime);
 			Integrator.SemiImplicitEuler(body, Time.deltaTime);
+        }
+
+		foreach(var body in bodies)
+        {
+			body.force = Vector2.zero;
         }
     }
 
