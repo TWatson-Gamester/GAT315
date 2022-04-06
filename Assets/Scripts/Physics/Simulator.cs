@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Simulator : Singleton<Simulator>
 {
-	public Vector2 gravity = new Vector2(0, -9.8f);
-	public List<Body> bodies = new List<Body>();
+	public List<Force> forces;
+	public List<Body> bodies { get; set; } = new List<Body>();
 	Camera activeCamera;
 
 	private void Start()
@@ -15,6 +15,7 @@ public class Simulator : Singleton<Simulator>
 
     private void Update()
     {
+		forces.ForEach(force => force.ApplyForce(bodies));
         foreach(var body in bodies)
         {
 			body.Step(Time.deltaTime);
@@ -23,7 +24,7 @@ public class Simulator : Singleton<Simulator>
 
 		foreach(var body in bodies)
         {
-			body.force = Vector2.zero;
+			body.acceleration = Vector2.zero;
         }
     }
 

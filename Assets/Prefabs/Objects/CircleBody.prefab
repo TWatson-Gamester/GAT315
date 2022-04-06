@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2021223143134879706}
-  - component: {fileID: 7345895373690764660}
   - component: {fileID: 7525046251859633130}
+  - component: {fileID: 7418619821189238895}
+  - component: {fileID: 7345895373690764660}
   m_Layer: 0
   m_Name: CircleBody
   m_TagString: Untagged
@@ -32,6 +33,31 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7525046251859633130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563404235359649304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6af8065950e0443418177b67e26aa3f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: {fileID: 7418619821189238895}
+--- !u!114 &7418619821189238895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563404235359649304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b6e362b2ef25d44182518cfebb871b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &7345895373690764660
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -83,15 +109,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7525046251859633130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1563404235359649304}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6af8065950e0443418177b67e26aa3f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
