@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0513ce572ba6c94bb34f9fe7083078f, type: 3}
-  m_Name: Speed
+  m_Script: {fileID: 11500000, guid: 9f7d3489f0bd56b4fa9ed721c11d5d32, type: 3}
+  m_Name: BodyType
   m_EditorClassIdentifier: 
-  _value: 1.6959801
-  min: 0
-  max: 30
+  _value: 0
+  values:
+  - STATIC
+  - KINEMATIC
+  - DYNAMIC
