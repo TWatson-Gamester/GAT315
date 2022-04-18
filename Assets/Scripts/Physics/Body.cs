@@ -24,7 +24,11 @@ public class Body : MonoBehaviour
     public float drag { get; set; } = 0;
     public float mass => shape.mass;
     public float inverseMass { get => (mass == 0) ? 0 : 1 / mass; }
+
+    [Tooltip("The shape of the body")]
     public Shape shape;
+
+    public List<Spring> springs { get; set; } = new List<Spring>();
     public eBodyType bodyType { get; set; } = eBodyType.DYNAMIC;
 
     public void ApplyForce(Vector2 force, eForceMode forceMode)

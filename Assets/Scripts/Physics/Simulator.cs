@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,6 +30,14 @@ public class Simulator : Singleton<Simulator>
 
 		while (timeAccumulator > fixedDeltaTime)
 		{
+			bodies.ForEach(body => body.shape.color = Color.white);
+			Collision.CreateContacts(bodies, out var contacts);
+			contacts.ForEach(contact => { 
+				contact.bodyA.shape.color = Color.red;
+				contact.bodyB.shape.color = Color.red;
+			});
+			Collision.SeparateContacts(contacts);
+
 			bodies.ForEach(body => Integrator.SemiImplicitEuler(body, fixedDeltaTime));
 
 			timeAccumulator = timeAccumulator - fixedDeltaTime;
@@ -41,6 +50,20 @@ public class Simulator : Singleton<Simulator>
 
 		fps.value = (1.0f / Time.deltaTime).ToString("F2");
 	}
+
+    public Body GetScreenToBody(Vector3 screen)
+    {
+		Body body = null;
+
+		Ray ray = activeCamera.ScreenPointToRay(screen);
+		RaycastHit2D hit = Physics2D.GetRayIntersection(ray);
+        if (hit.collider)
+        {
+			hit.collider.gameObject.TryGetComponent<Body>(out body);
+        }
+
+		return body;
+    }
 
     public Vector3 GetScreenToWorldPosition(Vector2 screen)
 	{
