@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Simulator : Singleton<Simulator>
 {
+	[SerializeField] BoolData simulate;
 	[SerializeField] FloatData fixedFPS;
 	[SerializeField] StringData fps;
 	
@@ -13,6 +14,8 @@ public class Simulator : Singleton<Simulator>
 	Camera activeCamera;
 	private float timeAccumulator = 0;
 	float fixedDeltaTime { get => 1.0f / fixedFPS.value; }
+	//BroadPhase broadPhase = new Quadtree();
+	BroadPhase broadPhase = new BVH();
 
 	private void Start()
 	{
@@ -21,24 +24,28 @@ public class Simulator : Singleton<Simulator>
 
     private void Update()
     {
+
+		fps.value = (1.0f / Time.deltaTime).ToString("F2");
+		if (!simulate.value) return;
 		timeAccumulator += Time.deltaTime;
 		forces.ForEach(force => force.ApplyForce(bodies));
-/*        foreach(var body in bodies)
-        {
-			body.Step(Time.deltaTime);
-        }*/
-
+		Vector2 screenSize = GetScreenSize();
 		while (timeAccumulator > fixedDeltaTime)
 		{
-			bodies.ForEach(body => body.shape.color = Color.white);
-			Collision.CreateContacts(bodies, out var contacts);
-			contacts.ForEach(contact => { 
-				contact.bodyA.shape.color = Color.red;
-				contact.bodyB.shape.color = Color.red;
-			});
+			// construct broad-phase tree
+			broadPhase.Build(new AABB(Vector2.zero, GetScreenSize()), bodies);
+			var contacts = new List<Contact>();
+			Collision.CreateBroadPhaseContacts(broadPhase, bodies, contacts);
+			Collision.CreateNarrowPhaseContacts(contacts);
 			Collision.SeparateContacts(contacts);
+			Collision.ApplyImpules(contacts);
 
-			bodies.ForEach(body => Integrator.SemiImplicitEuler(body, fixedDeltaTime));
+			bodies.ForEach(body =>
+			{
+				Integrator.SemiImplicitEuler(body, fixedDeltaTime);
+				body.position = body.position.Wrap(-screenSize * .5f, screenSize * .5f);
+				body.shape.GetAABB(body.position).Draw(Color.white);
+			});
 
 			timeAccumulator = timeAccumulator - fixedDeltaTime;
 		}
@@ -47,8 +54,7 @@ public class Simulator : Singleton<Simulator>
 		{
 			body.acceleration = Vector2.zero;
 		}
-
-		fps.value = (1.0f / Time.deltaTime).ToString("F2");
+		broadPhase.Draw();
 	}
 
     public Body GetScreenToBody(Vector3 screen)
@@ -70,4 +76,17 @@ public class Simulator : Singleton<Simulator>
 		Vector3 world = activeCamera.ScreenToWorldPoint(screen);
 		return new Vector3(world.x, world.y, 0);
 	}
+
+	public Vector2 GetScreenSize()
+    {
+		return activeCamera.ViewportToWorldPoint(Vector2.one) * 2;
+    }
+	public void ClearBodies()
+    {
+		foreach(Body body in bodies)
+        {
+			Destroy(body.gameObject);
+        }
+		bodies.Clear();
+    }
 }
