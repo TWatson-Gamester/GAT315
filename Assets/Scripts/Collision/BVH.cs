@@ -14,12 +14,13 @@ public class BVH : BroadPhase
 
     public override void Query(AABB aabb, List<Body> results)
     {
-        //
+        rootNode.Query(aabb, results);
+        queryResultCount += results.Count;
     }
 
     public override void Query(Body body, List<Body> results)
     {
-        //
+        Query(body.shape.GetAABB(body.position), results);
     }
 
     public override void Draw()

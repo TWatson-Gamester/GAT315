@@ -4,34 +4,47 @@ using UnityEngine;
 
 public class BVHNode
 {
-    AABB nodeAABB;
-    List<Body> nodeBodies = new List<Body>();
+    AABB aabb;
+    List<Body> bodies = new List<Body>();
 
     BVHNode right;
     BVHNode left;
 
     public BVHNode(List<Body> bodies)
     {
-        nodeBodies = bodies;
+        this.bodies = bodies;
         ComputeBoundry();
         Split();
     }
 
     public void ComputeBoundry()
     {
+        if (bodies.Count == 0) return;
 
+        aabb.center = bodies[0].position;
+        aabb.size = Vector3.zero;
+
+        bodies.ForEach(body => this.aabb.Expand(body.shape.GetAABB(body.position)));
     }
 
     public void Split()
     {
-
+        int length = bodies.Count;
+        int half = length / 2;
+        if (half >= 1)
+        {
+            left = new BVHNode(bodies.GetRange(0, half));
+            right = new BVHNode(bodies.GetRange(half, half));
+            //< clear bodies, bodies are now in left / right children >
+            bodies.Clear();
+        }
     }
 
     public void Query(AABB aabb, List<Body> results)
     {
-        if (!nodeAABB.Contains(aabb)) return;
+        if (!aabb.Contains(aabb)) return;
 
-        results.AddRange(nodeBodies);
+        results.AddRange(bodies);
 
         left?.Query(aabb, results);
         right?.Query(aabb, results);
@@ -39,7 +52,7 @@ public class BVHNode
 
     public void Draw()
     {
-        nodeAABB.Draw(Color.white);
+        aabb.Draw(Color.white);
 
         left?.Draw();
         right?.Draw();

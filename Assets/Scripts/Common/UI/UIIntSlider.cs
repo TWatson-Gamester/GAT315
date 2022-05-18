@@ -25,6 +25,8 @@ public class UIIntSlider : MonoBehaviour
 		slider.minValue = data.min;
 		slider.maxValue = data.max;
 
+		data.value = Mathf.Clamp(data.value, data.min, data.max);
+
 		slider.onValueChanged.AddListener(UpdateValue);
 		slider.SetValueWithoutNotify(data.value);
 

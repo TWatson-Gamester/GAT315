@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: FixedFPS
   m_EditorClassIdentifier: 
   _value: 60
-  min: 1
+  min: 30
   max: 120

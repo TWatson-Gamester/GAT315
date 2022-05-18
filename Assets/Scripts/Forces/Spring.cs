@@ -21,4 +21,14 @@ public class Spring
 
         Debug.DrawLine(bodyA.position, bodyB.position);
     }
+
+    static public Vector2 Force(Vector2 positionA, Vector2 positionB, float restLength, float k)
+    {
+        Vector2 direction = positionA - positionB;
+        float length = direction.magnitude;
+        float x = length - restLength;
+        float f = -k * x;
+
+        return f * direction.normalized;
+    }
 }

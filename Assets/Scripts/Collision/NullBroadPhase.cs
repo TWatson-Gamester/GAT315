@@ -8,8 +8,8 @@ public class NullBroadPhase : BroadPhase
 
 	public override void Build(AABB aabb, List<Body> bodies)
 	{
-		bodies.Clear();
-		bodies.AddRange(bodies);
+		queryResultCount = 0;
+		this.bodies = bodies;
 	}
 
 	public override void Query(AABB aabb, List<Body> results)
@@ -20,6 +20,7 @@ public class NullBroadPhase : BroadPhase
 	public override void Query(Body body, List<Body> results)
 	{
 		results.AddRange(bodies);
+		queryResultCount += results.Count;
 	}
 
 	public override void Draw()
